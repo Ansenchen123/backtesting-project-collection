@@ -7,5 +7,6 @@ __pycache__/
 *.pyo
 *.docx
 *.pdf
+portfolio/
 portfolio_preview/
 portfolio_assets/
