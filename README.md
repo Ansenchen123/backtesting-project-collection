@@ -1,70 +1,66 @@
-# 回測專案整合包
+# Backtesting Project Collection
 
-本資料夾收錄了 4 個彼此分離、但都與回測或交易模擬相關的 Python 專案。
+這個倉庫整理了 4 個彼此獨立的 Python 回測與交易模擬專案，保留原本策略概念，同時補齊可交付需要的結構、中文文件與公開前清理。
 
-這份整合包的目的，是把原本分散的專案集中到同一個資料夾中，方便查看、交付與後續整理；它**不是**要把這 4 個專案合併成同一套系統。
+這份整合包的目標不是把所有策略硬整合成單一框架，而是以作品集的方式呈現不同類型的量化練習：
 
-## 收錄專案
+- 策略回測
+- 均線交易模擬
+- 技術指標實驗
+- 以既有資料集重建投資報酬流程
 
-### 1. `econamic_model_test`
-路徑：[econamic_model_test](F:\learndata\回測專案整合包\econamic_model_test)
+## 專案列表
 
-簡介：
-以台股為主的簡易回測專案，核心是追價策略，會輸出歷史資料、交易紀錄、資金曲線與圖表。
+### `econamic_model_test`
 
-重點：
-- 有獨立的策略檔與命令列入口
-- 可直接輸出 CSV 與圖表
-- 已補上資料來源 fallback，降低執行環境限制
+以追價邏輯為核心的台股回測專案，支援抓取歷史資料、執行策略、輸出績效摘要與圖表。
 
-### 2. `econamic_reload`
-路徑：[econamic_reload](F:\learndata\回測專案整合包\econamic_reload)
+技術重點：
+- Python
+- pandas
+- matplotlib
+- yfinance
+- tvDatafeed fallback
 
-簡介：
-以短長均線交叉為基礎的台股模擬交易專案，保留帳戶、交割與每日結算概念。
+### `econamic_reload`
 
-重點：
-- 有資料下載、快取、帳戶管理與回測輸出
-- 輸出已集中到 `outputs/`
-- 適合展示較完整的模擬交易流程
+以移動平均交叉概念為主的交易模擬專案，包含資料下載、帳戶更新、資產變化追蹤與輸出結果。
 
-### 3. `TB_Strategy`
-路徑：[TB_Strategy](F:\learndata\回測專案整合包\TB_Strategy)
+技術重點：
+- Python
+- pandas
+- FinMind
+- matplotlib
 
-簡介：
-偏趨勢追蹤的回測腳本，包含加碼、停損與最大回撤計算。
+### `TB_Strategy`
 
-重點：
-- 有完整策略參數入口
-- 會輸出交易紀錄、績效摘要與權益曲線
-- 保留原本策略概念，但已整理成較穩定的可執行腳本
+偏向技術分析風格的回測腳本，包含部位管理、停損、最大回撤與績效統計。
 
-### 4. `PY_mod_econamic`
-路徑：[PY_mod_econamic](F:\learndata\回測專案整合包\PY_mod_econamic)
+技術重點：
+- Python
+- pandas
+- matplotlib
+- yfinance
 
-簡介：
-以 Excel 訊號資料驅動的交易模擬專案，適合驗證外部訊號或分類結果。
+### `PY_mod_econamic`
 
-重點：
-- 使用既有訊號檔與價格檔進行模擬
-- 可比較策略結果與 Buy and Hold
-- 輸出已集中到 `outputs/`
+以既有股票資料集為基礎的報酬模擬專案，可比較策略資產曲線與 Buy and Hold。
 
-## 快速操作說明
+技術重點：
+- Python
+- pandas
+- matplotlib
+- Excel dataset pipeline
 
-建議先進入想執行的專案資料夾，再安裝該專案自己的相依套件。
+## 快速開始
+
+每個資料夾都是獨立專案，請分別安裝依賴並執行。
 
 ### `econamic_model_test`
 
 ```bash
 cd econamic_model_test
 pip install -r requirements.txt
-python main.py
-```
-
-自訂參數範例：
-
-```bash
 python main.py --symbol 2330 --years 3 --cash 100000
 ```
 
@@ -73,13 +69,7 @@ python main.py --symbol 2330 --years 3 --cash 100000
 ```bash
 cd econamic_reload
 pip install -r requirements.txt
-python main.py
-```
-
-自訂參數範例：
-
-```bash
-python main.py --symbol 2330 --years 8 --cash 1500000 --short-window 10 --long-window 30
+python main.py --symbol 2330 --years 5
 ```
 
 ### `TB_Strategy`
@@ -87,13 +77,7 @@ python main.py --symbol 2330 --years 8 --cash 1500000 --short-window 10 --long-w
 ```bash
 cd TB_Strategy
 pip install -r requirements.txt
-python TB_Strategy.py
-```
-
-自訂參數範例：
-
-```bash
-python TB_Strategy.py --symbol 2330 --years 10 --cash 1500000 --stoploss-pct 5
+python TB_Strategy.py --symbol 2330 --years 5 --evaluation-years 2
 ```
 
 ### `PY_mod_econamic`
@@ -104,34 +88,29 @@ pip install -r requirements.txt
 python return_test.py --dataset google
 ```
 
-切換資料集範例：
+## 倉庫結構
 
-```bash
-python return_test.py --dataset intel
+```text
+backtesting-project-collection/
+├─ econamic_model_test/
+├─ econamic_reload/
+├─ TB_Strategy/
+├─ PY_mod_econamic/
+└─ README.md
 ```
 
-## 整理原則
+## 整理內容
 
-這份整合包遵守以下原則：
+這份公開版整合包已經做過以下處理：
 
-- 維持各專案分離，不強行整合成同一套架構
-- 不改變原本策略概念，只修補可交付性與可執行性
-- 補齊中文 README、依賴說明與輸出目錄整理
-- 保留每個專案自己的執行方式與定位
+- 保留各專案獨立結構，不強行合併
+- 補齊中文 README 與執行方式
+- 將輸出檔與暫存檔排除在版本控制之外
+- 清除 `.venv`、`outputs`、快取與本地帳務檔
+- 保留必要的輸入資料與可重現執行入口
 
-## 公開前注意事項
+## 注意事項
 
-各專案都已補上 `.gitignore`，用來排除不適合公開的內容，例如：
-
-- 虛擬環境
-- Python 快取檔
-- 回測輸出結果
-- 本地快取資料
-- 根目錄殘留的帳戶摘要、交易紀錄、壓縮檔或臨時資料
-
-如果之後要公開，建議從這份整合包內的專案副本開始整理，而不要直接動原始資料夾。
-
-## 備註
-
-- 原始專案仍保留在 `F:\learndata`，這份資料夾是另外複製出來的整理版本
-- 若之後需要進一步打包、壓縮或補交付文件，可以直接在這份整合包上繼續處理
+- 本倉庫以學習、研究與作品展示為主，不構成投資建議
+- 部分資料來源仰賴第三方服務，若服務端限制變動，結果可能需要調整
+- 若要進一步展示成果，建議各專案執行後自行產生最新圖表與報表

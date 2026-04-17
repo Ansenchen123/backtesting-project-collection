@@ -4,8 +4,8 @@ venv/
 env/
 __pycache__/
 *.pyc
-回測專案作品集.docx
-回測專案作品集.pdf
-backtest_portfolio.pdf
+*.pyo
+*.docx
+*.pdf
 portfolio_preview/
 portfolio_assets/
