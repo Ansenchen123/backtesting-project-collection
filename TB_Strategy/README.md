@@ -1,64 +1,54 @@
 # TB_Strategy
 
-`TB_Strategy` 是一個趨勢型回測腳本，保留了加碼、停損與最大回撤等交易管理概念。
+本專案為技術分析導向的回測腳本，涵蓋部位管理、停損控制、最大回撤與績效統計，適合用於觀察單一策略在歷史資料中的表現。
 
-## 專案內容
+## 功能內容
 
-- [TB_Strategy.py](F:\learndata\TB_Strategy\TB_Strategy.py)：策略主程式
-- `outputs/`：交易紀錄、摘要報表與權益曲線
+- 讀取歷史股價資料
+- 計算策略條件與進出場邏輯
+- 模擬部位與資產變化
+- 統計報酬率、最大回撤與交易次數
 
-## 策略說明
+## 技術基礎
 
-此策略以 20 日與 60 日均線為基礎，並加入部位管理：
-
-- 20MA 上穿 60MA 時進場
-- 價格延續上漲時可以加碼
-- 均線反轉或跌破停損條件時出場
-
-除了最終報酬外，腳本也會輸出交易明細與最大回撤，方便進一步分析。
-
-## 安裝需求
-
-安裝相依套件：
-
-```bash
-pip install -r requirements.txt
-```
+- Python
+- pandas
+- matplotlib
+- yfinance
 
 ## 執行方式
 
-使用預設參數：
-
 ```bash
-python TB_Strategy.py
+pip install -r requirements.txt
+python TB_Strategy.py --symbol 2330 --years 5 --evaluation-years 2
 ```
 
-自訂回測參數：
-
-```bash
-python TB_Strategy.py --symbol 2330 --years 10 --cash 1500000 --stoploss-pct 5
-```
-
-可用參數：
+常用參數：
 
 - `--symbol`：股票代號
-- `--exchange`：交易所，預設 `TWSE`
-- `--years`：抓取資料年數
+- `--years`：資料年數
+- `--evaluation-years`：評估區間
 - `--cash`：初始資金
-- `--evaluation-years`：實際評估期間
-- `--initial-shares-pct`：首次進場資金比例
-- `--add-shares-multiplier`：加碼倍率
 - `--stoploss-pct`：停損百分比
 
 ## 輸出內容
 
-執行後會在 [outputs](F:\learndata\TB_Strategy\outputs) 產生：
+執行完成後，結果會輸出至 `outputs/`，包含：
 
-- `*_transactions.csv`：交易紀錄
-- `*_summary.csv`：績效摘要
-- `*_equity_curve.png`：權益曲線圖
+- 回測摘要
+- 資產曲線圖
+- 交易統計資訊
 
-## 備註
+## 專案結構
 
-- 專案優先使用 `tvDatafeed`，若環境缺少相依套件，會自動退回 `yfinance`
-- 目前定位為策略驗證腳本，而不是完整交易平台
+```text
+TB_Strategy/
+├─ TB_Strategy.py
+├─ requirements.txt
+└─ README.md
+```
+
+## 注意事項
+
+- 本專案以策略研究與作品展示為主，不構成投資建議
+- 回測結果受資料品質與參數設定影響，使用前建議自行調整驗證

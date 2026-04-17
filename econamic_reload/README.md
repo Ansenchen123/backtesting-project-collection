@@ -1,68 +1,56 @@
 # econamic_reload
 
-`econamic_reload` 是一個以均線交叉為核心的台股模擬交易專案，主要用來觀察長短期移動平均下的買賣結果。
+本專案為移動平均交叉概念的交易模擬實驗，重點在於以歷史資料重建資產變化流程，觀察策略在不同條件下的表現。
 
-## 專案內容
+## 功能內容
 
-- [main.py](F:\learndata\econamic_reload\main.py)：回測入口
-- [get_data.py](F:\learndata\econamic_reload\get_data.py)：資料下載與快取邏輯
-- [func.py](F:\learndata\econamic_reload\func.py)：帳戶、負債與每日結算處理
-- `outputs/`：快取資料、帳戶快照、資金曲線與圖表
+- 下載指定股票的歷史資料
+- 計算均線與交易訊號
+- 模擬持倉、現金與總資產變化
+- 輸出回測摘要與圖表結果
 
-## 策略說明
+## 技術基礎
 
-此專案的核心邏輯為：
-
-- 短均線高於長均線時買進
-- 短均線低於長均線時全部賣出
-
-專案同時保留帳戶、持股、交割延遲與每日結算概念，讓它不只是單純的「資產曲線計算器」。
-
-## 安裝需求
-
-- Python 3.10 以上
-- [requirements.txt](F:\learndata\econamic_reload\requirements.txt) 內列出的套件
-
-安裝方式：
-
-```bash
-pip install -r requirements.txt
-```
+- Python
+- pandas
+- FinMind
+- matplotlib
 
 ## 執行方式
 
-使用預設參數：
-
 ```bash
-python main.py
+pip install -r requirements.txt
+python main.py --symbol 2330 --years 5
 ```
 
-指定股票、均線與資金：
-
-```bash
-python main.py --symbol 2330 --years 8 --cash 1500000 --short-window 10 --long-window 30
-```
-
-可用參數：
+常用參數：
 
 - `--symbol`：股票代號
-- `--years`：歷史資料期間
+- `--years`：回測年數
 - `--cash`：初始資金
-- `--short-window`：短均線週期
-- `--long-window`：長均線週期
-- `--refresh-data`：忽略快取，重新下載資料
+- `--short-window`：短期均線窗口
+- `--long-window`：長期均線窗口
 
 ## 輸出內容
 
-執行後會在 [outputs](F:\learndata\econamic_reload\outputs) 產生：
+執行完成後，結果會輸出至 `outputs/`，包含：
 
-- `account.json`：最新帳戶狀態
-- `account_summary.csv`：每日帳戶摘要
-- `*_equity_curve.csv`：回測資金曲線
-- `*_backtest.png`：回測圖表
-- `data_cache/`：下載後的歷史資料快取
+- 回測結果摘要
+- 資產曲線圖
+- 交易過程相關資料
 
-## 備註
+## 專案結構
 
-- 此專案偏向學習與模擬用途，不是正式交易系統
-- 專案已將原本散落的帳戶與資料輸出集中到 `outputs/`
+```text
+econamic_reload/
+├─ main.py
+├─ func.py
+├─ get_data.py
+├─ requirements.txt
+└─ README.md
+```
+
+## 注意事項
+
+- 本專案以研究與展示為主，不構成投資建議
+- 資料來源仰賴第三方服務，執行前請確認網路與資料服務可用
