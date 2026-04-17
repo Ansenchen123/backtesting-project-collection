@@ -1,0 +1,11 @@
+.git/
+.venv/
+venv/
+env/
+.env/
+__pycache__/
+*.pyc
+outputs/
+2330_data.csv
+account.txt
+account_summary.txt

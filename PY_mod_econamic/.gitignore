@@ -1,0 +1,8 @@
+.git/
+.venv/
+venv/
+__pycache__/
+*.pyc
+outputs/
+google_trading_log.csv
+intel_trading_log.csv

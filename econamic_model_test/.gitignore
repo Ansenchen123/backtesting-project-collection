@@ -1,0 +1,15 @@
+.git/
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+outputs/
+build/
+*.egg-info/
+tvdatafeed-main (1).zip
+tvdatafeed-main/build/
+tvdatafeed-main/**/*.pyc
+tvdatafeed-main/**/__pycache__/
+tvdatafeed-main/*.ipynb
+tvdatafeed-main/*.egg-info/
