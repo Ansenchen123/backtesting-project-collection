@@ -132,7 +132,7 @@ backtesting-project-collection/
 - Generated result folders are created by the scripts and are intentionally not required before running them.
 - The folder names keep their original spelling so commands and links match the repository exactly.
 
-## 繁體中文摘要
+## 摘要
 
 - 本倉庫整理四個彼此獨立的 Python 回測與交易模擬子專案。
 - `econamic_model_test` 使用追價規則測試台股資料，並可在 tvDatafeed 不可用時改用 yfinance。
