@@ -1,63 +1,34 @@
 # Backtesting Project Collection
 
-本倉庫收錄 4 個彼此獨立的 Python 回測與交易模擬專案，內容涵蓋策略回測、均線交易、技術指標實驗，以及以既有資料集重建投資報酬流程。
+This repository groups four independent Python experiments for stock-data loading, rule-based trading simulation, and spreadsheet-driven signal testing.
 
-整合目的如下：
+## How to Use This Collection
 
-- 保留各專案原本的策略概念與執行方式
-- 補齊公開展示所需的文件與專案結構
-- 清理不適合公開的本地環境、輸出檔與暫存內容
+Work inside one subproject at a time. Each folder has its own requirements file, and each script creates its result directory at runtime. Some runs need network access for TradingView, Yahoo Finance, or FinMind market data.
 
-## 專案列表
+## Subprojects
 
 ### `econamic_model_test`
 
-以追價邏輯為核心的台股回測專案，支援歷史資料取得、策略執行、績效摘要與圖表輸出。
+Description:
 
-技術基礎：
+- Runs a Taiwan equity chase-price backtest from `econamic_model_test/main.py`.
+- Uses `econamic_model_test/ChasePrice_StF.py` for the trading rule: buy when the close rises from the previous close, reduce later buy size after each buy, and sell when the close falls.
+- Attempts to use vendored TradingView access under `econamic_model_test/tvdatafeed-main/`; when that path is not usable, the script falls back to yfinance.
+- Saves price history, the strategy equity curve, trade records, and a chart after the simulation completes.
+
+Technology:
+
 - Python
 - pandas
 - matplotlib
 - yfinance
-- tvDatafeed fallback
+- vendored tvDatafeed source
+- setuptools
 
-### `econamic_reload`
+Run from the collection root:
 
-以移動平均交叉概念為主的交易模擬專案，包含資料下載、帳戶更新、資產變化追蹤與結果輸出。
-
-技術基礎：
-- Python
-- pandas
-- FinMind
-- matplotlib
-
-### `TB_Strategy`
-
-以技術分析為主軸的回測腳本，涵蓋部位管理、停損、最大回撤與績效統計。
-
-技術基礎：
-- Python
-- pandas
-- matplotlib
-- yfinance
-
-### `PY_mod_econamic`
-
-以既有股票資料集為基礎的報酬模擬專案，可比較策略資產曲線與 Buy and Hold 表現。
-
-技術基礎：
-- Python
-- pandas
-- matplotlib
-- Excel dataset pipeline
-
-## 執行方式
-
-各資料夾為獨立專案，請分別安裝依賴並執行。
-
-### `econamic_model_test`
-
-```bash
+```powershell
 cd econamic_model_test
 pip install -r requirements.txt
 python main.py --symbol 2330 --years 3 --cash 100000
@@ -65,7 +36,25 @@ python main.py --symbol 2330 --years 3 --cash 100000
 
 ### `econamic_reload`
 
-```bash
+Description:
+
+- Runs a FinMind-backed moving-average simulation from `econamic_reload/main.py`.
+- Uses `econamic_reload/get_data.py` to download or reuse cached Taiwan stock daily data.
+- Uses `econamic_reload/func.py` to model cash, stock holdings, three-day debt settlement, account persistence, and daily account snapshots.
+- Calculates short and long moving averages, executes buy and sell signals, then writes an equity curve and chart.
+
+Technology:
+
+- Python
+- pandas
+- FinMind
+- matplotlib
+- JSON account state
+- CSV output
+
+Run from the collection root:
+
+```powershell
 cd econamic_reload
 pip install -r requirements.txt
 python main.py --symbol 2330 --years 5
@@ -73,7 +62,25 @@ python main.py --symbol 2330 --years 5
 
 ### `TB_Strategy`
 
-```bash
+Description:
+
+- Runs a 20-day and 60-day moving-average crossover strategy from `TB_Strategy/TB_Strategy.py`.
+- Fetches daily price history with tvDatafeed when available and falls back to yfinance when that import is unavailable.
+- Buys on upward moving-average crosses, adds shares after strong price movement, and exits on downward crosses or stop-loss triggers.
+- Saves transaction records, a summary file, and an equity-curve chart.
+
+Technology:
+
+- Python
+- pandas
+- matplotlib
+- tvdatafeed
+- yfinance
+- setuptools
+
+Run from the collection root:
+
+```powershell
 cd TB_Strategy
 pip install -r requirements.txt
 python TB_Strategy.py --symbol 2330 --years 5 --evaluation-years 2
@@ -81,35 +88,55 @@ python TB_Strategy.py --symbol 2330 --years 5 --evaluation-years 2
 
 ### `PY_mod_econamic`
 
-```bash
+Description:
+
+- Runs a spreadsheet-driven trading simulation from `PY_mod_econamic/return_test.py`.
+- Reads signal workbooks `PY_mod_econamic/google.xlsx` or `PY_mod_econamic/intel.xlsx` and matching price workbooks `PY_mod_econamic/google_filtered_data.xlsx` or `PY_mod_econamic/intel_filtered_data.xlsx`.
+- Buys after bullish signal rows, sells after bearish signal rows, applies a fee rate, tracks total assets, and compares the result with a buy-and-hold line in the chart.
+- Includes `PY_mod_econamic/downloadXslx.py` as a separate TradingView-based helper for regenerating Google price data.
+
+Technology:
+
+- Python
+- pandas
+- openpyxl
+- matplotlib
+- Excel workbook inputs
+- CSV and PNG output
+
+Run from the collection root:
+
+```powershell
 cd PY_mod_econamic
 pip install -r requirements.txt
 python return_test.py --dataset google
 ```
 
-## 倉庫結構
+The accepted dataset values are google and intel.
+
+## Repository Layout
 
 ```text
 backtesting-project-collection/
-├─ econamic_model_test/
-├─ econamic_reload/
-├─ TB_Strategy/
-├─ PY_mod_econamic/
-└─ README.md
+  econamic_model_test/
+  econamic_reload/
+  TB_Strategy/
+  PY_mod_econamic/
+  README.md
 ```
 
-## 整理內容
+## Data and Output Notes
 
-公開版整合包已完成以下處理：
+- The first three subprojects can request market data over the network.
+- The spreadsheet-driven project can run from the included Excel files.
+- Generated result folders are created by the scripts and are intentionally not required before running them.
+- The folder names keep their original spelling so commands and links match the repository exactly.
 
-- 保留各專案獨立結構，不強行合併為單一框架
-- 補齊 README 與基本執行說明
-- 排除輸出檔、暫存檔與本地環境
-- 清理 `.venv`、`outputs`、快取與帳務相關本地檔案
-- 保留必要的輸入資料與可重現的執行入口
+## 繁體中文摘要
 
-## 注意事項
-
-- 本倉庫以學習、研究與作品展示為主，不構成投資建議
-- 部分資料來源依賴第三方服務，若服務限制變動，可能需要調整執行方式
-- 若需展示最新成果，建議重新執行各專案以產生最新圖表與報表
+- 本倉庫整理四個彼此獨立的 Python 回測與交易模擬子專案。
+- `econamic_model_test` 使用追價規則測試台股資料，並可在 tvDatafeed 不可用時改用 yfinance。
+- `econamic_reload` 使用 FinMind 資料與移動平均線訊號，同時模擬帳戶現金、持股與交割負債。
+- `TB_Strategy` 測試 20 日與 60 日均線交叉、加碼與停損條件。
+- `PY_mod_econamic` 使用內含 Excel 檔案進行訊號驅動的交易模擬，並輸出紀錄與圖表。
+- 每個子專案都列出對應技術與執行方式，方便分別安裝依賴並單獨執行。
